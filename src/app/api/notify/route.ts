@@ -43,6 +43,7 @@ const client = createPublicClient({
 const fetchLatestIndexedBlockNumber = async (): Promise<number> => {
     try {
         const { data, error } = await fetchQuery(queryLatestIndexedBlockNumber);
+        console.log(data.Accounts.Account[0].createdAtBlockNumber)
       return data.Accounts.Account[0].createdAtBlockNumber;
     } catch (error) {
       console.error("Failed to fetch the latest indexed block number:", error);
@@ -180,6 +181,7 @@ console.log(orders.length)
         console.error(`Failed to send notification to ${user?.username}:`, error);
       }
     }
+    console.log(filteredOrders.length)
   }
 
   return NextResponse.json({ message: "Notifications sent successfully" });

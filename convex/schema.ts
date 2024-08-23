@@ -10,7 +10,7 @@ export default defineSchema({
   subscriptions: defineTable({
     userId: v.id("users"),
     fanToken: v.string(),
-    alertType: v.string(), // 'buy' or 'sell'
+    alertType: v.optional(v.string()), // 'buy' or 'sell'
     active: v.boolean(),
   }).index("by_userId", ["userId"]),
 });

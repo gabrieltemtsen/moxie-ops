@@ -5,7 +5,7 @@ export const createSubscription = mutation({
   args: {
     userId: v.id("users"),
     fanToken: v.string(),
-    alertType: v.string(),
+    alertType: v.optional(v.string()),
     active: v.boolean(),
   },
   handler: async (ctx, { userId, fanToken, alertType, active }) => {
@@ -21,7 +21,7 @@ export const unsubscribe = mutation({
   args: {
     userId: v.id("users"),
     fanToken: v.string(),
-    alertType: v.string(),
+    alertType: v.optional(v.string()), 
   },
   handler: async (ctx, { userId, fanToken, alertType }) => {
     // Find the subscription and update its active status to false
