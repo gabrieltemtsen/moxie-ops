@@ -103,15 +103,19 @@ const handleRequest = frames(async (ctx) => {
         </div>
       ),
       buttons: [
-        <Button key="subscribe" action="post" target={{ query: { action: "subscribe" } }}>
-          Subscribe
+        <Button key="subscribe" action="post" target={{ query: { action: "" } }}>
+          Reset
         </Button>,
-        <Button key="unsubscribe" action="post" target={{ query: { action: "unsubscribe" } }}>
-          Unsubscribe
-        </Button>,
-        <Button key="request-stats" action="post" target={{ query: { action: "select-stats" } }}>
-          Request Stats
-        </Button>,
+        <Button 
+        key="share"
+        action="link"
+        target={
+          'https://warpcast.com/~/compose?text=Subscribe%20to%20daily%20Moxie%20Fantoken%20tracker%20to%20see%20who%20bought/sold%20your%20fan%20tokens%20or%20request%20your%20fantoken%20stats%20at%20anytime%20by%20@gabrieltemtsen&embeds[]=https://moxie-ops.xyz/frames'
+        }
+      >
+        share
+      </Button>
+        
       ],
     };
   }
@@ -136,7 +140,20 @@ const handleRequest = frames(async (ctx) => {
           </div>
         </div>
       ),
-      buttons: [],
+      buttons: [
+        <Button key="subscribe" action="post" target={{ query: { action: "" } }}>
+          Reset
+        </Button>,
+         <Button 
+         key="share"
+         action="link"
+         target={
+           'https://warpcast.com/~/compose?text=Subscribe%20to%20daily%20Moxie%20Fantoken%20tracker%20to%20see%20who%20bought/sold%20your%20fan%20tokens%20or%20request%20your%20fantoken%20stats%20at%20anytime%20by%20@gabrieltemtsen&embeds[]=https://moxie-ops.xyz/frames'
+         }
+       >
+         share
+       </Button>
+      ],
     };
   }
 
@@ -159,6 +176,15 @@ const handleRequest = frames(async (ctx) => {
         <Button key="enter-username" action="post" target={{ query: { action: "request-stats-user", username: ctx.message?.inputText || "" } }}>
         Request User FT Stats
         </Button>,
+         <Button 
+         key="share"
+         action="link"
+         target={
+           'https://warpcast.com/~/compose?text=Subscribe%20to%20daily%20Moxie%20Fantoken%20tracker%20to%20see%20who%20bought/sold%20your%20fan%20tokens%20or%20request%20your%20fantoken%20stats%20at%20anytime%20by%20@gabrieltemtsen&embeds[]=https://moxie-ops.xyz/frames'
+         }
+       >
+         share
+       </Button>
       ],
       textInput: "Enter Fan Token Username:",
     };
@@ -185,7 +211,20 @@ const handleRequest = frames(async (ctx) => {
             </div>
           </div>
         ),
-        buttons: [],
+        buttons: [
+          <Button key="subscribe" action="post" target={{ query: { action: "" } }}>
+            Reset
+          </Button>,
+           <Button 
+           key="share"
+           action="link"
+           target={
+             'https://warpcast.com/~/compose?text=Subscribe%20to%20daily%20Moxie%20Fantoken%20tracker%20to%20see%20who%20bought/sold%20your%20fan%20tokens%20or%20request%20your%20fantoken%20stats%20at%20anytime%20by%20@gabrieltemtsen&embeds[]=https://moxie-ops.xyz/frames'
+           }
+         >
+           share
+         </Button>
+        ],
       };
     }
 
@@ -210,6 +249,15 @@ const handleRequest = frames(async (ctx) => {
         <Button key="subscribe" action="post" target={{ query: { action: "" } }}>
           Reset
         </Button>,
+         <Button 
+         key="share"
+         action="link"
+         target={
+           'https://warpcast.com/~/compose?text=Subscribe%20to%20daily%20Moxie%20Fantoken%20tracker%20to%20see%20who%20bought/sold%20your%20fan%20tokens%20or%20request%20your%20fantoken%20stats%20at%20anytime%20by%20@gabrieltemtsen&embeds[]=https://moxie-ops.xyz/frames'
+         }
+       >
+         share
+       </Button>
         
       ],
     };
@@ -233,6 +281,15 @@ const handleRequest = frames(async (ctx) => {
         <Button key="enter-channel" action="post" target={{ query: { action: "request-stats-channel", username: ctx.message?.inputText || "" } }}>
           Request Channel FT
         </Button>,
+         <Button 
+         key="share"
+         action="link"
+         target={
+           'https://warpcast.com/~/compose?text=Subscribe%20to%20daily%20Moxie%20Fantoken%20tracker%20to%20see%20who%20bought/sold%20your%20fan%20tokens%20or%20request%20your%20fantoken%20stats%20at%20anytime%20by%20@gabrieltemtsen&embeds[]=https://moxie-ops.xyz/frames'
+         }
+       >
+         share
+       </Button>
       ],
       textInput: "Enter Channel Name/ID:",
     };
@@ -263,6 +320,15 @@ const handleRequest = frames(async (ctx) => {
           <Button key="subscribe" action="post" target={{ query: { action: "" } }}>
             Reset
           </Button>,
+           <Button 
+           key="share"
+           action="link"
+           target={
+             'https://warpcast.com/~/compose?text=Subscribe%20to%20daily%20Moxie%20Fantoken%20tracker%20to%20see%20who%20bought/sold%20your%20fan%20tokens%20or%20request%20your%20fantoken%20stats%20at%20anytime%20by%20@gabrieltemtsen&embeds[]=https://moxie-ops.xyz/frames'
+           }
+         >
+           share
+         </Button>
         ],
       };
     }
@@ -288,6 +354,15 @@ const handleRequest = frames(async (ctx) => {
         <Button key="subscribe" action="post" target={{ query: { action: "" } }}>
           Reset
         </Button>,
+         <Button 
+         key="share"
+         action="link"
+         target={
+           'https://warpcast.com/~/compose?text=Subscribe%20to%20daily%20Moxie%20Fantoken%20tracker%20to%20see%20who%20bought/sold%20your%20fan%20tokens%20or%20request%20your%20fantoken%20stats%20at%20anytime%20by%20@gabrieltemtsen&embeds[]=https://moxie-ops.xyz/frames'
+         }
+       >
+         share
+       </Button>
       ],
     };
   }
@@ -305,6 +380,15 @@ const handleRequest = frames(async (ctx) => {
       <Button key="subscribe" action="post" target={{ query: { action: "" } }}>
         Reset
       </Button>,
+       <Button 
+       key="share"
+       action="link"
+       target={
+         'https://warpcast.com/~/compose?text=Subscribe%20to%20daily%20Moxie%20Fantoken%20tracker%20to%20see%20who%20bought/sold%20your%20fan%20tokens%20or%20request%20your%20fantoken%20stats%20at%20anytime%20by%20@gabrieltemtsen&embeds[]=https://moxie-ops.xyz/frames'
+       }
+     >
+       share
+     </Button>
     ],
   };
 });
