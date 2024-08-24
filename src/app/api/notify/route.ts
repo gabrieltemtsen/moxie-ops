@@ -180,6 +180,30 @@ console.log(orders.length)
       } catch (error) {
         console.error(`Failed to send notification to ${user?.username}:`, error);
       }
+    } else {
+      const user = await client.query(api.users.getUserById, { userId: subscription.userId });
+
+      console.log(`No orders detected for ${subscription.fanToken}`);
+      const noOrdersMessage = `Hey ${user?.username}, you have no orders for your Fan Token ${subscription.fanToken} yet. Keep an eye on it!`;
+       // Send the notification
+       try {
+        await axios.put(
+          "https://api.warpcast.com/v2/ext-send-direct-cast",
+          {
+            recipientFid: user?.fid,
+            noOrdersMessage,
+            idempotencyKey: `${user?.fid}-${Date.now()}`,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${process.env.NEXT_PUBLIC_WARPCAST_API_KEY}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      } catch (error) {
+        console.error(`Failed to send notification to ${user?.username}:`, error);
+      }
     }
     console.log(filteredOrders.length)
   }
