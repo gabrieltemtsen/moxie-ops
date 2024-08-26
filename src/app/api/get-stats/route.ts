@@ -49,8 +49,15 @@ const fetchLatestIndexedBlockNumber = async (): Promise<number> => {
 };
 
 // Utility function to get the current block number
-const getCurrentBlockNumber = async (): Promise<number> => {
-  return fetchLatestIndexedBlockNumber();
+const getOldTimestamp = async (): Promise<any> => {
+  const currentBlock = await client.getBlockNumber();
+  const averageBlockTimeSeconds = 2; // Adjust if different for your network
+  const blocksPerDay = Math.floor((24 * 60 * 60) / averageBlockTimeSeconds);
+  const blockNumber24HoursAgo = Number(currentBlock) - blocksPerDay;
+  const timestamp = await client.getBlock({blockNumber: BigInt(blockNumber24HoursAgo)}).then(block => block.timestamp)
+  console.log('HERE IS THE TIMESTAMP', timestamp)
+
+  return Number(timestamp);
 };
 
 const resolveBeneficiaryOrVestingToFid = (address: string) =>
@@ -59,33 +66,39 @@ const resolveBeneficiaryOrVestingToFid = (address: string) =>
     ?.map((d) => d?.fid || 'unknown');
 
 // Fetch the latest orders from Moxie based on the block number
-const fetchOrders = async (symbol: string, blockNumber: number) => {
+const fetchOrders = async (symbol: string, timestamp: number) => {
   const queryOrders = gql`
-    query GetLatestOrders($symbol: String!, $blockNumber: Int) {
-      orders(
-        first: 1000,
-        orderDirection: desc,
-        block: { number: $blockNumber }
-      ) {
-        blockInfo {
-          blockNumber
-          timestamp
-        }
-        orderType
-        subjectAmount
-        subjectToken {
-          symbol
-        }
-        user {
-          address: id
-        }
-      }
+    query GetLatestOrders($symbol: String!, $startTime: Int!) {
+  orders(
+    first: 100
+    orderDirection: desc
+    orderBy: blockInfo__timestamp
+    where: {subjectToken_: {symbol: $symbol}, orderType_in: [BUY, SELL], blockInfo_: { timestamp_gt: $startTime}}
+  ) {
+    blockInfo {
+      blockNumber
+      hash
+      timestamp
     }
+    orderType
+    price
+    protocolToken
+    protocolTokenAmount
+    subjectAmount
+    subjectToken {
+      address: id
+      symbol
+    }
+    user {
+      address: id
+    }
+  }
+}
   `;
 
   const variablesOnOrder = {
     symbol,
-    blockNumber,
+    startTime: timestamp,
   };
 
   try {
@@ -124,10 +137,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Failed to resolve the username" }, { status: 404 });
   }
 
-  const currentBlockNumber = await getCurrentBlockNumber();
+  const timestamp = await getOldTimestamp();
 
   // Fetch the latest orders for the specified Fan Token
-  const orders = await fetchOrders(fanToken, currentBlockNumber);
+  const orders = await fetchOrders(fanToken, timestamp);
 
   // Filter the orders for the specific Fan Token
   const filteredOrders = orders.filter((order: any) => order.subjectToken.symbol === fanToken);
@@ -146,15 +159,15 @@ export async function POST(req: NextRequest) {
   );
 
   const message = `
-Hey ${username},
+Hey ${username},\n
 
 Here are the latest stats for your Fan Token ${fanToken}:
 
 ${usernames.map((u, index) =>
-    `${index + 1}. @${u.username} (${Number(u.roundedAmount)}) ${u.orderType}`
+    `\n ${index + 1}. @${u.username} (${Number(u.roundedAmount)}) ${u.orderType}`
   ).join("\n")}
 
-Best regards,
+\nBest regards,
 Your Fan Token Tracker by @gabrieltemtsen
 `;
 

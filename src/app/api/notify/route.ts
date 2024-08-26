@@ -6,11 +6,13 @@ import { gql, GraphQLClient } from "graphql-request";
 import { ethers } from "ethers";
 import * as dotenv from "dotenv";
 dotenv.config({ path: ".env.local" });
-import { createPublicClient, formatUnits, http } from 'viem';import { base } from 'viem/chains'
+import { createPublicClient, formatUnits, http } from 'viem';
+import { base } from 'viem/chains'
 import data from "../../../utility/moxie_resolve.json";
 import { fetchQuery } from "@airstack/node";
 
 import { init } from "@airstack/node";
+import { start } from "repl";
 
 init(`${process.env.NEXT_PUBLIC_AIRSTACK_KEY}`);
 
@@ -52,8 +54,15 @@ const fetchLatestIndexedBlockNumber = async (): Promise<number> => {
   };
 
 // Utility function to get the current block number
-const getCurrentBlockNumber = async (): Promise<number> => {
-    return fetchLatestIndexedBlockNumber()
+const getOldTimestamp = async (): Promise<any> => {
+    const currentBlock = await client.getBlockNumber();
+    const averageBlockTimeSeconds = 2; // Adjust if different for your network
+    const blocksPerDay = Math.floor((24 * 60 * 60) / averageBlockTimeSeconds);
+    const blockNumber24HoursAgo = Number(currentBlock) - blocksPerDay;
+    const timestamp = await client.getBlock({blockNumber: BigInt(blockNumber24HoursAgo)}).then(block => block.timestamp)
+    console.log('HERE IS THE TIMESTAMP', timestamp)
+
+    return Number(timestamp);
   };
 
   const resolveBeneficiaryOrVestingToFid = (address: string) =>
@@ -62,33 +71,39 @@ const getCurrentBlockNumber = async (): Promise<number> => {
         ?.map((d) => d?.fid || 'unknown');
 
 // Fetch the latest orders from Moxie based on the block number
-const fetchOrders = async (symbol: string, blockNumber: number) => {
+const fetchOrders = async (symbol: string, timestamp: number) => {
   const queryOrders = gql`
-    query GetLatestOrders($symbol: String!, $blockNumber: Int) {
-      orders(
-        first: 1000,
-        orderDirection: desc,
-        block: { number: $blockNumber }
-      ) {
-        blockInfo {
-          blockNumber
-          timestamp
-        }
-        orderType
-        subjectAmount
-        subjectToken {
-          symbol
-        }
-        user {
-          address: id
-        }
-      }
+    query GetLatestOrders($symbol: String!, $startTime: Int!) {
+  orders(
+    first: 100
+    orderDirection: desc
+    orderBy: blockInfo__timestamp
+    where: {subjectToken_: {symbol: $symbol}, orderType_in: [BUY, SELL], blockInfo_: { timestamp_gt: $startTime}}
+  ) {
+    blockInfo {
+      blockNumber
+      hash
+      timestamp
     }
+    orderType
+    price
+    protocolToken
+    protocolTokenAmount
+    subjectAmount
+    subjectToken {
+      address: id
+      symbol
+    }
+    user {
+      address: id
+    }
+  }
+}
   `;
 
   const variablesOnOrder = {
     symbol,
-    blockNumber,
+    startTime: timestamp,
   };
 
   try {
@@ -119,7 +134,7 @@ export async function POST(req: NextRequest) {
     const client = new ConvexHttpClient(process.env["NEXT_PUBLIC_CONVEX_URL"] || '');
 
   // Fetch the current block number
-  const currentBlockNumber = await getCurrentBlockNumber();
+  const currentBlockNumber = await getOldTimestamp();
 
   // Fetch all active subscriptions
   const subscriptions = await client.query(api.subscriptions.getActiveSubscriptions);
@@ -152,12 +167,12 @@ console.log(orders.length)
       );
 
       // Format the notification message
-      const message = `Hey ${user?.username},
-      There has been activity on your Fan Token ${subscription.fanToken}!
+      const message = `Hey ${user?.username},\n
+      There has been activity on your Fan Token!
       
-      **${filteredOrders.length} orders detected:**
-      ${usernames.map((u, index) =>`${index + 1}. @${u.username} (${Number(u.roundedAmount)}) ${u.orderType} `).join("\n")}
-    Best regards,
+      \n**${filteredOrders.length} orders detected:**
+      ${usernames.map((u, index) =>`\n ${index + 1}. @${u.username} (${Number(u.roundedAmount)}) ${u.orderType} `).join("\n")}
+    \nBest regards,
     Your Fan Token Tracker by @gabrieltemtsen
       `;
 
