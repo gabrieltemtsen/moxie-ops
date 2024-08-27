@@ -8,13 +8,13 @@ const frames = createFrames({
     farcasterHubContext({
       ...(process.env.NODE_ENV === "production"
         ? {
-          hubHttpUrl: "https://hubs.airstack.xyz",
-          hubRequestOptions: {
-            headers: {
-              "x-airstack-hubs": process.env.NEXT_PUBLIC_AIRSTACK_KEY as string,
+            hubHttpUrl: "https://hubs.airstack.xyz",
+            hubRequestOptions: {
+              headers: {
+                "x-airstack-hubs": process.env.NEXT_PUBLIC_AIRSTACK_KEY as string,
+              },
             },
-          },
-        }
+          }
         : {
             hubHttpUrl: "http://localhost:3010/hub",
           }),
@@ -76,6 +76,9 @@ const handleRequest = frames(async (ctx) => {
         <Button key="channel-ft" action="post" target={{ query: { action: "request-stats-channel" } }}>
           Request Channel FT Stats
         </Button>,
+        <Button key="back" action="post" target={{ query: { action: "" } }}>
+          Back
+        </Button>,
       ],
     };
   }
@@ -83,21 +86,52 @@ const handleRequest = frames(async (ctx) => {
   // Subscribe
   if (action === "subscribe") {
     console.log("requesterFid1", requesterFid);
+
+    // Check if the user is already subscribed
+    const existingSubscriptionResponse = await fetch(`${baseUrl}/api/check-sub`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        fanToken: `fid:${requesterFid}`,
+      }),
+    });
+
+    const existingSubscription = await existingSubscriptionResponse.json();
+    console.log("existingSubscription", existingSubscription);
+
+    if (existingSubscription.isSubscribed.isSubscribed) {
+      return {
+        image: (
+          <div tw="flex w-full h-full items-center justify-center text-center bg-purple-700">
+            <div tw="text-3xl font-bold text-white">
+              You are already subscribed!
+            </div>
+          </div>
+        ),
+        buttons: [
+          <Button key="back" action="post" target={{ query: { action: "" } }}>
+            Back
+          </Button>,
+        ],
+      };
+    }
+
+    // Proceed with subscription if not already subscribed
     const subscriptionResponse = await fetch(`${baseUrl}/api/subs`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         fid: requesterFid,
         username: username,
-        fanToken: `fid:${requesterFid}`, // Replace with actual fanToken information
+        fanToken: `fid:${requesterFid}`,
         alertType: "buy-sell",
       }),
     });
 
     return {
       image: (
-        <div tw="flex w-full h-full items-center justify-center text-center">
-          <div tw="text-2xl font-bold text-green-600">
+        <div tw="flex w-full h-full items-center justify-center text-center bg-purple-700">
+          <div tw="text-3xl font-bold text-white">
             {subscriptionResponse.ok ? 'Subscription Successful!' : 'Subscription Failed. Please try again.'}
           </div>
         </div>
@@ -107,15 +141,17 @@ const handleRequest = frames(async (ctx) => {
           Reset
         </Button>,
         <Button 
-        key="share"
-        action="link"
-        target={
-          'https://warpcast.com/~/compose?text=Subscribe%20to%20daily%20Moxie%20Fantoken%20tracker%20to%20see%20who%20bought/sold%20your%20fan%20tokens%20or%20request%20your%20fantoken%20stats%20at%20anytime%20by%20@gabrieltemtsen&embeds[]=https://moxie-ops.xyz/frames'
-        }
-      >
-        share
-      </Button>
-        
+          key="share"
+          action="link"
+          target={
+            'https://warpcast.com/~/compose?text=Subscribe%20to%20daily%20Moxie%20Fantoken%20tracker%20to%20see%20who%20bought/sold%20your%20fan%20tokens%20or%20request%20your%20fantoken%20stats%20at%20anytime%20by%20@gabrieltemtsen&embeds[]=https://moxie-ops.xyz/frames'
+          }
+        >
+          share
+        </Button>,
+        <Button key="back" action="post" target={{ query: { action: "" } }}>
+          Back
+        </Button>,
       ],
     };
   }
@@ -128,14 +164,14 @@ const handleRequest = frames(async (ctx) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         fid: requesterFid,
-        fanToken: "fanTokenHere", // Replace with actual fanToken information
+        fanToken: `fid:${requesterFid}`,
       }),
     });
 
     return {
       image: (
-        <div tw="flex w-full h-full items-center justify-center text-center">
-          <div tw="text-2xl font-bold text-green-600">
+        <div tw="flex w-full h-full items-center justify-center text-center bg-purple-700">
+          <div tw="text-3xl font-bold text-white">
             {unsubscribeResponse.ok ? 'Unsubscription Successful!' : 'Unsubscription Failed. Please try again.'}
           </div>
         </div>
@@ -144,15 +180,18 @@ const handleRequest = frames(async (ctx) => {
         <Button key="subscribe" action="post" target={{ query: { action: "" } }}>
           Reset
         </Button>,
-         <Button 
-         key="share"
-         action="link"
-         target={
-           'https://warpcast.com/~/compose?text=Subscribe%20to%20daily%20Moxie%20Fantoken%20tracker%20to%20see%20who%20bought/sold%20your%20fan%20tokens%20or%20request%20your%20fantoken%20stats%20at%20anytime%20by%20@gabrieltemtsen&embeds[]=https://moxie-ops.xyz/frames'
-         }
-       >
-         share
-       </Button>
+        <Button 
+          key="share"
+          action="link"
+          target={
+            'https://warpcast.com/~/compose?text=Subscribe%20to%20daily%20Moxie%20Fantoken%20tracker%20to%20see%20who%20bought/sold%20your%20fan%20tokens%20or%20request%20your%20fantoken%20stats%20at%20anytime%20by%20@gabrieltemtsen&embeds[]=https://moxie-ops.xyz/frames'
+          }
+        >
+          share
+        </Button>,
+        <Button key="back" action="post" target={{ query: { action: "" } }}>
+          Back
+        </Button>,
       ],
     };
   }
@@ -174,17 +213,11 @@ const handleRequest = frames(async (ctx) => {
       ),
       buttons: [
         <Button key="enter-username" action="post" target={{ query: { action: "request-stats-user", username: ctx.message?.inputText || "" } }}>
-        Request User FT Stats
+          Request User FT Stats
         </Button>,
-         <Button 
-         key="share"
-         action="link"
-         target={
-           'https://warpcast.com/~/compose?text=Subscribe%20to%20daily%20Moxie%20Fantoken%20tracker%20to%20see%20who%20bought/sold%20your%20fan%20tokens%20or%20request%20your%20fantoken%20stats%20at%20anytime%20by%20@gabrieltemtsen&embeds[]=https://moxie-ops.xyz/frames'
-         }
-       >
-         share
-       </Button>
+        <Button key="back" action="post" target={{ query: { action: "select-stats" } }}>
+          Back
+        </Button>,
       ],
       textInput: "Enter Fan Token Username:",
     };
@@ -205,8 +238,8 @@ const handleRequest = frames(async (ctx) => {
     if (!fanTokenFid) {
       return {
         image: (
-          <div tw="flex w-full h-full items-center justify-center text-center">
-            <div tw="text-2xl font-bold text-red-600">
+          <div tw="flex w-full h-full items-center justify-center text-center bg-purple-700">
+            <div tw="text-3xl font-bold text-white">
               Fan Token Not Found
             </div>
           </div>
@@ -215,15 +248,9 @@ const handleRequest = frames(async (ctx) => {
           <Button key="subscribe" action="post" target={{ query: { action: "" } }}>
             Reset
           </Button>,
-           <Button 
-           key="share"
-           action="link"
-           target={
-             'https://warpcast.com/~/compose?text=Subscribe%20to%20daily%20Moxie%20Fantoken%20tracker%20to%20see%20who%20bought/sold%20your%20fan%20tokens%20or%20request%20your%20fantoken%20stats%20at%20anytime%20by%20@gabrieltemtsen&embeds[]=https://moxie-ops.xyz/frames'
-           }
-         >
-           share
-         </Button>
+          <Button key="back" action="post" target={{ query: { action: "select-stats" } }}>
+            Back
+          </Button>,
         ],
       };
     }
@@ -239,8 +266,8 @@ const handleRequest = frames(async (ctx) => {
 
     return {
       image: (
-        <div tw="flex w-full h-full items-center justify-center text-center">
-          <div tw="text-2xl font-bold text-green-600">
+        <div tw="flex w-full h-full items-center justify-center text-center bg-purple-700">
+          <div tw="text-3xl font-bold text-white">
             {statsResponse.ok ? 'Stats Request Successful! Check your DCs.' : 'Stats Request Failed. Please try again.'}
           </div>
         </div>
@@ -249,16 +276,9 @@ const handleRequest = frames(async (ctx) => {
         <Button key="subscribe" action="post" target={{ query: { action: "" } }}>
           Reset
         </Button>,
-         <Button 
-         key="share"
-         action="link"
-         target={
-           'https://warpcast.com/~/compose?text=Subscribe%20to%20daily%20Moxie%20Fantoken%20tracker%20to%20see%20who%20bought/sold%20your%20fan%20tokens%20or%20request%20your%20fantoken%20stats%20at%20anytime%20by%20@gabrieltemtsen&embeds[]=https://moxie-ops.xyz/frames'
-         }
-       >
-         share
-       </Button>
-        
+        <Button key="back" action="post" target={{ query: { action: "select-stats" } }}>
+          Back
+        </Button>,
       ],
     };
   }
@@ -281,15 +301,9 @@ const handleRequest = frames(async (ctx) => {
         <Button key="enter-channel" action="post" target={{ query: { action: "request-stats-channel", username: ctx.message?.inputText || "" } }}>
           Request Channel FT
         </Button>,
-         <Button 
-         key="share"
-         action="link"
-         target={
-           'https://warpcast.com/~/compose?text=Subscribe%20to%20daily%20Moxie%20Fantoken%20tracker%20to%20see%20who%20bought/sold%20your%20fan%20tokens%20or%20request%20your%20fantoken%20stats%20at%20anytime%20by%20@gabrieltemtsen&embeds[]=https://moxie-ops.xyz/frames'
-         }
-       >
-         share
-       </Button>
+        <Button key="back" action="post" target={{ query: { action: "select-stats" } }}>
+          Back
+        </Button>,
       ],
       textInput: "Enter Channel Name/ID:",
     };
@@ -310,8 +324,8 @@ const handleRequest = frames(async (ctx) => {
     if (!fanTokenCid) {
       return {
         image: (
-          <div tw="flex w-full h-full items-center justify-center text-center">
-            <div tw="text-2xl font-bold text-red-600">
+          <div tw="flex w-full h-full items-center justify-center text-center bg-purple-700">
+            <div tw="text-3xl font-bold text-white">
               Channel Not Found
             </div>
           </div>
@@ -320,15 +334,9 @@ const handleRequest = frames(async (ctx) => {
           <Button key="subscribe" action="post" target={{ query: { action: "" } }}>
             Reset
           </Button>,
-           <Button 
-           key="share"
-           action="link"
-           target={
-             'https://warpcast.com/~/compose?text=Subscribe%20to%20daily%20Moxie%20Fantoken%20tracker%20to%20see%20who%20bought/sold%20your%20fan%20tokens%20or%20request%20your%20fantoken%20stats%20at%20anytime%20by%20@gabrieltemtsen&embeds[]=https://moxie-ops.xyz/frames'
-           }
-         >
-           share
-         </Button>
+          <Button key="back" action="post" target={{ query: { action: "select-stats" } }}>
+            Back
+          </Button>,
         ],
       };
     }
@@ -344,8 +352,8 @@ const handleRequest = frames(async (ctx) => {
 
     return {
       image: (
-        <div tw="flex w-full h-full items-center justify-center text-center">
-          <div tw="text-2xl font-bold text-green-600">
+        <div tw="flex w-full h-full items-center justify-center text-center bg-purple-700">
+          <div tw="text-3xl font-bold text-white">
             {statsResponse.ok ? 'Stats Request Successful! Check your DCs.' : 'Stats Request Failed. Please try again.'}
           </div>
         </div>
@@ -354,15 +362,9 @@ const handleRequest = frames(async (ctx) => {
         <Button key="subscribe" action="post" target={{ query: { action: "" } }}>
           Reset
         </Button>,
-         <Button 
-         key="share"
-         action="link"
-         target={
-           'https://warpcast.com/~/compose?text=Subscribe%20to%20daily%20Moxie%20Fantoken%20tracker%20to%20see%20who%20bought/sold%20your%20fan%20tokens%20or%20request%20your%20fantoken%20stats%20at%20anytime%20by%20@gabrieltemtsen&embeds[]=https://moxie-ops.xyz/frames'
-         }
-       >
-         share
-       </Button>
+        <Button key="back" action="post" target={{ query: { action: "select-stats" } }}>
+          Back
+        </Button>,
       ],
     };
   }
@@ -370,8 +372,8 @@ const handleRequest = frames(async (ctx) => {
   // Fallback for any other unexpected states
   return {
     image: (
-      <div tw="flex w-full h-full items-center justify-center text-center">
-        <div tw="text-2xl font-bold text-red-600">
+      <div tw="flex w-full h-full items-center justify-center text-center bg-purple-700">
+        <div tw="text-3xl font-bold text-white">
           An unexpected error occurred.
         </div>
       </div>
@@ -380,15 +382,9 @@ const handleRequest = frames(async (ctx) => {
       <Button key="subscribe" action="post" target={{ query: { action: "" } }}>
         Reset
       </Button>,
-       <Button 
-       key="share"
-       action="link"
-       target={
-         'https://warpcast.com/~/compose?text=Subscribe%20to%20daily%20Moxie%20Fantoken%20tracker%20to%20see%20who%20bought/sold%20your%20fan%20tokens%20or%20request%20your%20fantoken%20stats%20at%20anytime%20by%20@gabrieltemtsen&embeds[]=https://moxie-ops.xyz/frames'
-       }
-     >
-       share
-     </Button>
+      <Button key="back" action="post" target={{ query: { action: "" } }}>
+        Back
+      </Button>,
     ],
   };
 });
