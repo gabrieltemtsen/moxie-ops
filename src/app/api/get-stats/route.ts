@@ -168,7 +168,8 @@ ${usernames.map((u, index) =>
   ).join("\n")}
 
 \nBest regards,
-Your Fan Token Tracker by @gabrieltemtsen
+Your Fan Token Tracker by @gabrieltemtsen\n
+https://www.moxie-ops.xyz/frames
 `;
 
   // Send the message to the requester via Warpcast

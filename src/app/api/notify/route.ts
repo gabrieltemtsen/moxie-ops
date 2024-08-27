@@ -172,9 +172,10 @@ console.log(orders.length)
       
       \n**${filteredOrders.length} orders detected:**
       ${usernames.map((u, index) =>`\n ${index + 1}. @${u.username} (${Number(u.roundedAmount)}) ${u.orderType} `).join("\n")}
-    \nBest regards,
-    Your Fan Token Tracker by @gabrieltemtsen
-      `;
+  \nBest regards,
+Your Fan Token Tracker by @gabrieltemtsen\n
+https://www.moxie-ops.xyz/frames
+`;
 
       // Send the notification
       try {
