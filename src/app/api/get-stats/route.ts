@@ -8,7 +8,7 @@ import { base } from 'viem/chains';
 import data from "../../../utility/moxie_resolve.json";
 import { fetchQuery } from "@airstack/node";
 import { init } from "@airstack/node";
-import { shortenWalletAddress } from "@/utility/shorten";
+import { shortenWalletAddress } from "../../../utility/shorten";
 
 init(`${process.env.NEXT_PUBLIC_AIRSTACK_KEY}`);
 

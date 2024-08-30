@@ -13,7 +13,7 @@ import { fetchQuery } from "@airstack/node";
 
 import { init } from "@airstack/node";
 import { start } from "repl";
-import { shortenWalletAddress } from "@/utility/shorten.js";
+import { shortenWalletAddress } from "../../../utility/shorten";
 
 init(`${process.env.NEXT_PUBLIC_AIRSTACK_KEY}`);
 
