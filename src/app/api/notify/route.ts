@@ -13,6 +13,7 @@ import { fetchQuery } from "@airstack/node";
 
 import { init } from "@airstack/node";
 import { start } from "repl";
+import { shortenWalletAddress } from "@/utility/shorten.js";
 
 init(`${process.env.NEXT_PUBLIC_AIRSTACK_KEY}`);
 
@@ -68,7 +69,7 @@ const getOldTimestamp = async (): Promise<any> => {
   const resolveBeneficiaryOrVestingToFid = (address: string) =>
       (data as any[])
         ?.filter((d) => d?.address === address?.toLowerCase())
-        ?.map((d) => d?.fid || 'unknown');
+        ?.map((d) => d?.fid || shortenWalletAddress(address));
 
 // Fetch the latest orders from Moxie based on the block number
 const fetchOrders = async (symbol: string, timestamp: number) => {
@@ -127,7 +128,20 @@ const fetchOrders = async (symbol: string, timestamp: number) => {
     const response = await fetch(url, options);
     const data = await response.json();
 
-    return data.users ? data.users[0]['username'] : "Unknown";
+    return data.users ? data.users[0]['username'] : null;
+    };
+    const fetchUsernameByAddr = async (address: any) => {
+      const url = `https://api.neynar.com/v2/farcaster/user/bulk-by-address?addresses=${address}`;
+      const options = {
+        method: 'GET',
+        headers: {accept: 'application/json', api_key: '37246BB8-2347-4F29-8EC6-32C3F5DCCE69'}
+      };
+      const response = await fetch(url, options);
+      const data = await response.json();
+    
+      const username = data[address] ? data[address][0]['username'] : shortenWalletAddress(address);
+      console.log('HERE IS THE addr', address)
+      return username;
     };
 
 export async function POST(req: NextRequest) {
@@ -157,7 +171,7 @@ console.log(orders.length)
         filteredOrders.map(async (order: any) => {
          
           const fid: any = resolveBeneficiaryOrVestingToFid(order.user.address);
-          const username = await fetchUsername(fid);
+          const username = await fetchUsername(fid) || await fetchUsernameByAddr(order.user.address) ;
           const orderType = order.orderType;
           const amount = formatUnits(order.subjectAmount, 18);
           const roundedAmount = Math.round(Number(amount) * 100) / 100;
@@ -174,7 +188,7 @@ console.log(orders.length)
       ${usernames.map((u, index) =>`\n ${index + 1}. @${u.username} (${Number(u.roundedAmount)}) ${u.orderType} `).join("\n")}
   \nBest regards,
 Your Fan Token Tracker by @gabrieltemtsen\n
-https://www.moxie-ops.xyz/frames
+frame-link: https://www.moxie-ops.xyz/frames
 `;
 
       // Send the notification

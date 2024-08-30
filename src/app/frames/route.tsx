@@ -58,10 +58,7 @@ const handleRequest = frames(async (ctx) => {
   // Select between User FT or Channel FT
   if (action === "select-stats") {
     return {
-      imageOptions: {
-        width: 1200,
-        height: 630,
-      },
+      
       image: (
         <div
           tw="relative flex w-full h-full items-center justify-center bg-cover bg-center bg-no-repeat"
