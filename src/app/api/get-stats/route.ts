@@ -167,6 +167,8 @@ export async function POST(req: NextRequest) {
   const usernames = await Promise.all(
     filteredOrders.map(async (order: any) => {
       const fid: any = resolveBeneficiaryOrVestingToFid(order.user.address);
+      console.log(fid)
+      console.log(order.user.address)
       const username = await fetchUsername(fid) || await fetchUsernameByAddr(order.user.address) ;
       const orderType = order.orderType;
       const amount = formatUnits(order.subjectAmount, 18);
