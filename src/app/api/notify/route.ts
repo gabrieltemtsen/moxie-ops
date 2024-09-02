@@ -139,7 +139,9 @@ const fetchOrders = async (symbol: string, timestamp: number) => {
       const response = await fetch(url, options);
       const data = await response.json();
     
-      const username = data[address] ? data[address][0]['username'] : shortenWalletAddress(address);
+      const username = (address === '0x0000000000000000000000000000000000000000') 
+  ? 'buy&burn' 
+  : (data[address] ? data[address][0]['username'] : shortenWalletAddress(address));
       console.log('HERE IS THE addr', address)
       return username;
     };
@@ -162,7 +164,7 @@ export async function POST(req: NextRequest) {
 console.log(orders.length)
     // Filter the orders for the specific Fan Token
     const filteredOrders = orders.filter((order:any) => order.subjectToken.symbol === subscription.fanToken);
-    if (filteredOrders.length > 0) {
+    if (filteredOrders.length > 0 && orders.length > 0) {
       // Fetch the user associated with the subscription
       const user = await client.query(api.users.getUserById, { userId: subscription.userId });
 
@@ -189,7 +191,7 @@ console.log(orders.length)
   \nBest regards,
 Your Fan Token Tracker by @gabrieltemtsen\n
 frame-link: https://www.moxie-ops.xyz/frames\n
-\n if you want to unsubscribe from this notification, please use the frame to manage your subscription
+\n To unsubscribe from this notification, please use the frame to manage your subscription
 
 `;
 
@@ -216,26 +218,26 @@ frame-link: https://www.moxie-ops.xyz/frames\n
       const user = await client.query(api.users.getUserById, { userId: subscription.userId });
 
       console.log(`No orders detected for ${subscription.fanToken}`);
-      const noOrdersMessage = `Hey ${user?.username}, you have no orders for your Fan Token ${subscription.fanToken} yet. Keep an eye on it!`;
-       // Send the notification
-       try {
-        await axios.put(
-          "https://api.warpcast.com/v2/ext-send-direct-cast",
-          {
-            recipientFid: user?.fid,
-            noOrdersMessage,
-            idempotencyKey: `${user?.fid}-${Date.now()}`,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${process.env.NEXT_PUBLIC_WARPCAST_API_KEY}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-      } catch (error) {
-        console.error(`Failed to send notification to ${user?.username}:`, error);
-      }
+      // const noOrdersMessage = `Hey ${user?.username}, you have no orders for your Fan Token ${subscription.fanToken} yet. Keep an eye on it!`;
+      //  // Send the notification
+      //  try {
+      //   await axios.put(
+      //     "https://api.warpcast.com/v2/ext-send-direct-cast",
+      //     {
+      //       recipientFid: user?.fid,
+      //       noOrdersMessage,
+      //       idempotencyKey: `${user?.fid}-${Date.now()}`,
+      //     },
+      //     {
+      //       headers: {
+      //         Authorization: `Bearer ${process.env.NEXT_PUBLIC_WARPCAST_API_KEY}`,
+      //         "Content-Type": "application/json",
+      //       },
+      //     }
+      //   );
+      // } catch (error) {
+      //   console.error(`Failed to send notification to ${user?.username}:`, error);
+      // }
     }
     console.log(filteredOrders.length)
   }

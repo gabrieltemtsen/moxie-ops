@@ -136,8 +136,9 @@ const fetchUsernameByAddr = async (address: any) => {
   const response = await fetch(url, options);
   const data = await response.json();
 
-  const username = data[address] ? data[address][0]['username'] : shortenWalletAddress(address);
-  console.log('HERE IS THE addr', address)
+  const username = (address === '0x0000000000000000000000000000000000000000') 
+  ? 'Buy and Burn' 
+  : (data[address] ? data[address][0]['username'] : shortenWalletAddress(address));  console.log('HERE IS THE addr', address)
   return username;
 };
 
