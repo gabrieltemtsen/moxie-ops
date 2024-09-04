@@ -140,7 +140,7 @@ const fetchOrders = async (symbol: string, timestamp: number) => {
       const data = await response.json();
     
       const username = (address === '0x0000000000000000000000000000000000000000') 
-  ? 'buy&burn' 
+  ? ' Buy&Burn' 
   : (data[address] ? data[address][0]['username'] : shortenWalletAddress(address));
       console.log('HERE IS THE addr', address)
       return username;
