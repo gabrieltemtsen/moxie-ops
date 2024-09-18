@@ -93,7 +93,7 @@ export const POST = frames(async (ctx) => {
    
 
    
-  return castActionMessage(`LIKE: Ⓜ${likeScore},\nREPLY: Ⓜ${replyScore},\nRECAST: Ⓜ${recastScore}`);
+  return castActionMessage(`LIKE:$${likeInUSD},\nREPLY:$${replyInUSD},\nRECAST:$${recastInUSD}`);
 
  
 
