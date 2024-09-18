@@ -35,10 +35,14 @@ const handleRequest = frames(async (ctx) => {
     return {
       image: (
         <div
-          tw="relative flex w-full h-full items-center justify-center bg-cover object-scale-down bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${baseUrl}/moxie-power.png)`, objectFit: 'contain' }}
-        >
-        </div>
+        tw="relative flex w-full h-full items-center justify-center bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url(${baseUrl}/moxie-power.png)`,
+          backgroundSize: 'contain', // Ensures the image fits inside the container
+          objectFit: 'cover', // Ensures the image covers the area without repeating
+        }}
+      >
+      </div>
       ),
       buttons: [
         <Button key="subscribe" action="link" target={'https://warpcast.com/~/add-cast-action?actionType=post&icon=check&name=moxie+power+in+%E2%93%82+&postUrl=https%3A%2F%2Fwww.moxie-ops.xyz%2Factions%2FgetMoxiepower'}>
