@@ -80,20 +80,20 @@ export const POST = frames(async (ctx) => {
   const casterFid = ctx.message?.castId?.fid as number;
   const convertedFid = String(casterFid);
   const userData = await getUserDataForFid({ fid: casterFid });
-  console.log('userData:', userData);
+  const defaultMoxiePrice = 0.0019;
   const username = userData?.username;
   const farscore = (await getUserFarscore(convertedFid));
   const likeScore = Math.round(1 * farscore);
-  const likeInUSD = parseFloat((moxiePrice ? likeScore * moxiePrice : 0).toFixed(4));
+  const likeInUSD = parseFloat((moxiePrice ? likeScore * moxiePrice : defaultMoxiePrice).toFixed(4));
   const replyScore = Math.round(3 * farscore);
-  const replyInUSD =parseFloat((moxiePrice ? replyScore * moxiePrice : 0).toFixed(4));
+  const replyInUSD =parseFloat((moxiePrice ? replyScore * moxiePrice : defaultMoxiePrice).toFixed(4));
   const recastScore = Math.round(6 * farscore);
-  const recastInUSD = parseFloat((moxiePrice ? recastScore * moxiePrice : 0).toFixed(4));
+  const recastInUSD = parseFloat((moxiePrice ? recastScore * moxiePrice : defaultMoxiePrice).toFixed(4));
 
    
 
    
-  return castActionMessage(`${username}'s POWER: LIKE: M${likeScore} ($${likeInUSD}), REPLY: M${replyScore} ($${replyInUSD}), RECAST/QUOTE: M${recastScore} ($${recastInUSD})`);
+  return castActionMessage(`${username}'s POWER: LIKE: Ⓜ${likeScore} ($${likeInUSD}), REPLY: Ⓜ${replyScore} ($${replyInUSD}), RECAST: Ⓜ${recastScore} ($${recastInUSD})`);
 
  
 
