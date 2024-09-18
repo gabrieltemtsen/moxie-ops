@@ -34,15 +34,30 @@ const handleRequest = frames(async (ctx) => {
     console.log("requesterFid", requesterFid);
     return {
       image: (
-        <div
-        tw="relative flex w-full h-full items-center justify-center bg-cover bg-center bg-no-repeat"
+        <div 
         style={{
-          backgroundImage: `url(https://tenor.com/cEHiXVjow0L.gif)`,
-          backgroundSize: 'contain', // Ensures the image fits inside the container
-          objectFit: 'cover', // Ensures the image covers the area without repeating
+          width: '100%',
+          height: '100%',
+          padding: '5rem',
+          margin: '2rem',
+          background: 'linear-gradient(to right, #BF40BF 50%, #CF9FFF 50%)',
         }}
-      >
-      </div>
+         tw="flex flex-col relative p-3 overflow-hidden  h-full w-full">
+          
+
+           <div tw="flex absolute m-20 p-9 inset-0 flex-col h-77 items-center justify-center p-8 bg-white text-black rounded-lg shadow-lg ">
+           <div tw="flex justify-center items-center text-4xl font-extrabold text-black tracking-wide drop-shadow-lg">
+        
+  Install Moxie Power Cast Actions
+</div>
+<div tw="text-xl mt-4 text-black font-medium tracking-wider">
+  Check the REPLYKE value in USD and in Moxies easily using cast actions.
+</div>
+<div tw="absolute bottom-4 right-4 text-sm text-blue-700 italic">
+  Frame by @gabrieltemtsen
+</div>
+          </div>
+        </div>
       ),
       buttons: [
         <Button key="subscribe" action="link" target={'https://warpcast.com/~/add-cast-action?actionType=post&icon=check&name=moxie+power+in+%E2%93%82+&postUrl=https%3A%2F%2Fwww.moxie-ops.xyz%2Factions%2FgetMoxiepower'}>
