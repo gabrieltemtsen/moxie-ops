@@ -37,7 +37,7 @@ const handleRequest = frames(async (ctx) => {
         <div
         tw="relative flex w-full h-full items-center justify-center bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url(${baseUrl}/moxie-power.png)`,
+          backgroundImage: `url(https://tenor.com/cEHiXVjow0L.gif)`,
           backgroundSize: 'contain', // Ensures the image fits inside the container
           objectFit: 'cover', // Ensures the image covers the area without repeating
         }}
@@ -51,7 +51,7 @@ const handleRequest = frames(async (ctx) => {
         <Button key="unsubscribe" action="link" target={'https://warpcast.com/~/add-cast-action?actionType=post&icon=check&name=moxie+power+in+%EF%BC%84+&postUrl=https%3A%2F%2Fwww.moxie-ops.xyz%2Factions%2FgetMoxiePowerUSD'}>
           Moxie power in $
         </Button>,
-        <Button key="request-stats" action="link" target={''}>
+        <Button key="request-stats" action="link" target={'https://warpcast.com/~/compose?text=Check%20caster%27s%20moxie%20power%20easily%20through%20cast%20actions%20in%20Moxies%20or%20USD%20install%20actions%20in%20frame%20below%20by%20@gabrieltemtsen&embeds[]=https://moxie-ops.xyz/frames/moxie-power'}>
           Share
         </Button>,
       ],
