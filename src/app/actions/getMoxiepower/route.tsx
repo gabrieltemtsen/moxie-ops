@@ -87,13 +87,13 @@ export const POST = frames(async (ctx) => {
   const likeInUSD = parseFloat((moxiePrice ? likeScore * moxiePrice : 0).toFixed(4));
   const replyScore = Math.round(3 * farscore);
   const replyInUSD =parseFloat((moxiePrice ? replyScore * moxiePrice : 0).toFixed(4));
-  const recastScore =(6 * farscore);
+  const recastScore = Math.round(6 * farscore);
   const recastInUSD = parseFloat((moxiePrice ? recastScore * moxiePrice : 0).toFixed(4));
 
    
 
    
-  return castActionMessage(`${username}'s  REPLYKE POWER: \n\n LIKE: ${likeScore} Moxies ==> $${likeInUSD} \n\n REPLY: ${replyScore} Moxies ==> $${replyInUSD} \n\n RECAST/QUOTE:${recastScore} Moxies ==> $${recastInUSD}`);
+  return castActionMessage(`${username}'s POWER: LIKE: M${likeScore} ($${likeInUSD}), REPLY: M${replyScore} ($${replyInUSD}), RECAST/QUOTE: M${recastScore} ($${recastInUSD})`);
 
  
 
