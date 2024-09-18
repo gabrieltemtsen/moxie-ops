@@ -84,11 +84,11 @@ export const POST = frames(async (ctx) => {
   const username = userData?.username;
   const farscore = (await getUserFarscore(convertedFid));
   const likeScore = Math.round(1 * farscore);
-  const likeInUSD = parseFloat((moxiePrice ? likeScore * moxiePrice : defaultMoxiePrice).toFixed(4));
+  const likeInUSD = parseFloat((moxiePrice ? likeScore * moxiePrice : defaultMoxiePrice *likeScore).toFixed(4));
   const replyScore = Math.round(3 * farscore);
-  const replyInUSD =parseFloat((moxiePrice ? replyScore * moxiePrice : defaultMoxiePrice).toFixed(4));
+  const replyInUSD =parseFloat((moxiePrice ? replyScore * moxiePrice : defaultMoxiePrice*replyScore).toFixed(4));
   const recastScore = Math.round(6 * farscore);
-  const recastInUSD = parseFloat((moxiePrice ? recastScore * moxiePrice : defaultMoxiePrice).toFixed(4));
+  const recastInUSD = parseFloat((moxiePrice ? recastScore * moxiePrice : defaultMoxiePrice*recastScore).toFixed(4));
 
    
 
