@@ -1,26 +1,9 @@
 import { farcasterHubContext } from "frames.js/middleware";
 import { createFrames, Button } from "frames.js/next";
 import axios from "axios";
+import {frames} from "../frames"
 
-const frames = createFrames({
-  basePath: '/frames',
-  middleware: [
-    farcasterHubContext({
-      ...(process.env.NODE_ENV === "production"
-        ? {
-            hubHttpUrl: "https://hubs.airstack.xyz",
-            hubRequestOptions: {
-              headers: {
-                "x-airstack-hubs": process.env.NEXT_PUBLIC_AIRSTACK_KEY as string,
-              },
-            },
-          }
-        : {
-            hubHttpUrl: "http://localhost:3010/hub",
-          }),
-    }),
-  ],
-});
+
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
@@ -48,7 +31,7 @@ const handleRequest = frames(async (ctx) => {
            <div tw="flex absolute m-20 p-9 inset-0 flex-col h-77 items-center justify-center p-8 bg-white text-black rounded-lg shadow-lg ">
            <div tw="flex justify-center items-center text-4xl font-extrabold text-black tracking-wide drop-shadow-lg">
         
-  Install Moxie Power Cast Actions
+  Install Replyke Power Cast Actions
 </div>
 <div tw="text-xl mt-4 text-black font-medium tracking-wider">
   Check the REPLYKE value in USD and in Moxies easily using cast actions.
@@ -60,13 +43,13 @@ const handleRequest = frames(async (ctx) => {
         </div>
       ),
       buttons: [
-        <Button key="subscribe" action="link" target={'https://warpcast.com/~/add-cast-action?actionType=post&icon=check&name=moxie+power+in+%E2%93%82+&postUrl=https%3A%2F%2Fwww.moxie-ops.xyz%2Factions%2FgetMoxiepower'}>
-          Moxie power in Ⓜ
+        <Button key="subscribe" action="link" target={'https://warpcast.com/~/add-cast-action?actionType=post&icon=check&name=replyke+power+in+%E2%93%82+&postUrl=https%3A%2F%2Fwww.moxie-ops.xyz%2Factions%2FgetReplykePower'}>
+          replyke power in Ⓜ
         </Button>,
-        <Button key="unsubscribe" action="link" target={'https://warpcast.com/~/add-cast-action?actionType=post&icon=check&name=moxie+power+in+%EF%BC%84+&postUrl=https%3A%2F%2Fwww.moxie-ops.xyz%2Factions%2FgetMoxiePowerUSD'}>
-          Moxie power in $
+        <Button key="unsubscribe" action="link" target={'https://warpcast.com/~/add-cast-action?actionType=post&icon=check&name=replyke+power+in+%EF%BC%84+&postUrl=https%3A%2F%2Fwww.moxie-ops.xyz%2Factions%2FgetReplykePowerUSD'}>
+          replyke power in $
         </Button>,
-        <Button key="request-stats" action="link" target={'https://warpcast.com/~/compose?text=Check%20caster%27s%20moxie%20power%20easily%20through%20cast%20actions%20in%20Moxies%20or%20USD%20install%20actions%20in%20frame%20below%20by%20@gabrieltemtsen&embeds[]=https://moxie-ops.xyz/frames/moxie-power'}>
+        <Button key="request-stats" action="link" target={'https://warpcast.com/~/compose?text=Check%20caster%27s%20replyke%20power%20easily%20through%20cast%20actions%20in%20Moxies%20or%20USD%20install%20actions%20in%20frame%20below%20by%20@gabrieltemtsen&embeds[]=https://moxie-ops.xyz/frames/moxie-power'}>
           Share
         </Button>,
       ],

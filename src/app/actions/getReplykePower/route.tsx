@@ -69,9 +69,9 @@ export const GET = async (req: NextRequest) => {
       type: "post",
     },
     icon: "check",
-    name: "check moxie power",
-    aboutUrl: `${process.env.VERCEL_URL}/actions/getMoxiepower`,
-    description: "Check Casters Moxie Power",
+    name: "check replyke power ",
+    aboutUrl: `${process.env.VERCEL_URL}/actions/getReplykePower`,
+    description: "Check Casters Replyke Power",
   });
 };
 
@@ -93,7 +93,7 @@ export const POST = frames(async (ctx) => {
    
 
    
-  return castActionMessage(`LIKE:$${likeInUSD},\nREPLY:$${replyInUSD}, RECAST:$${recastInUSD}`);
+  return castActionMessage(`LIKE: Ⓜ${likeScore},\nREPLY: Ⓜ${replyScore}, RECAST: Ⓜ${recastScore}`);
 
  
 
