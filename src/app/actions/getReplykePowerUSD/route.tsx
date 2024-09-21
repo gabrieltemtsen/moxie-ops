@@ -80,7 +80,7 @@ export const POST = frames(async (ctx) => {
   const casterFid = ctx.message?.castId?.fid as number;
   const convertedFid = String(casterFid);
   const userData = await getUserDataForFid({ fid: casterFid });
-  const defaultMoxiePrice = 0.0019;
+  const defaultMoxiePrice = 0.002103;
   const username = userData?.username;
   const farscore = (await getUserFarscore(convertedFid));
   const likeScore = Math.round(1 * farscore);
