@@ -247,7 +247,7 @@ const handleRequest = frames(async (ctx) => {
       image: (
         <div tw="flex w-full h-full items-center justify-center text-center bg-purple-700">
           <div tw="text-3xl font-bold text-white">
-            {statsResponse.ok ? 'Stats Request Successful! Check your DCs.' : 'Stats Request Failed. Please try again.'}
+            {statsResponse.ok ? 'Stats Request Successfull! Check your DCs.' : 'Stats Request Failed. Please try again.'}
           </div>
         </div>
       ),
