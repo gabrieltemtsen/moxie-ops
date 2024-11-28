@@ -8,6 +8,8 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
 const handleRequest = frames(async (ctx) => {
   const action = ctx.url.searchParams.get("action");
+  console.log("AAAAAAAA***Action is ******88********:", action);
+
   const inputText = ctx.message?.inputText || ctx.url.searchParams.get("username");
   const username = ctx.message?.requesterUserData?.username;
   const requesterFid = String(ctx.message?.requesterFid);

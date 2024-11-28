@@ -14,6 +14,7 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as raffle from "../raffle.js";
 import type * as subscriptions from "../subscriptions.js";
 import type * as users from "../users.js";
 import type * as utils_web3 from "../utils/web3.js";
@@ -27,6 +28,7 @@ import type * as utils_web3 from "../utils/web3.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  raffle: typeof raffle;
   subscriptions: typeof subscriptions;
   users: typeof users;
   "utils/web3": typeof utils_web3;

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://maiton.xyz/schema.json",
+  "style": "default",
+  "rsc": true,
+  "tsx": true,
+  "aliases": {
+    "components": "@/app/frames/components",
+    "utils": "@/app/frames/lib/utils",
+    "lib": "@/app/frames/lib"
+  },
+  "resolvedPaths": {
+    "cwd": "/Users/gabrieltemtsen/Documents/gabrieltemtsen/moxie-ops",
+    "utils": "/Users/gabrieltemtsen/Documents/gabrieltemtsen/moxie-ops/src/app/frames/lib/utils",
+    "components": "/Users/gabrieltemtsen/Documents/gabrieltemtsen/moxie-ops/src/app/frames/components",
+    "lib": "/Users/gabrieltemtsen/Documents/gabrieltemtsen/moxie-ops/src/app/frames/lib"
+  }
+}
