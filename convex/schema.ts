@@ -13,4 +13,9 @@ export default defineSchema({
     alertType: v.optional(v.string()), // 'buy' or 'sell'
     active: v.boolean(),
   }).index("by_userId", ["userId"]),
+
+  raffleEntries: defineTable({
+    fid: v.string(),
+    username: v.string(),
+  }).index("by_fid", ["fid"]),
 });
